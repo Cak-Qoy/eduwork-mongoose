@@ -1,8 +1,13 @@
 
+import { useState } from 'react';
 import Input from '../../components/Input';
 import './index.scss';
+import axios from 'axios';
 
 const Tambah = () => {
+  useState(() => {
+    axios.post("http://localhost:3000/api/product")
+  }, [])
   return (
     <div className="main">
       <div className="card">

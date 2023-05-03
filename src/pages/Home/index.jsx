@@ -1,12 +1,23 @@
-import { Link } from 'react-router-dom';
-import './index.scss';
+import { Link } from "react-router-dom";
+import "./index.scss";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Home = () => {
-  return(
+const Home = (props) => {
+  const [product, setProduct] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/product").then((result) => {
+      setProduct(result.data);
+    });
+  }, []);
+
+  return (
     <div className="main">
-      <Link to="/tambah" className="btn btn-primary">Tamah Produk</Link>
+      <Link to="/tambah" className="btn btn-primary">
+        Tamah Produk
+      </Link>
       <div className="search">
-        <input type="text" placeholder="Masukan kata kunci..."/>
+        <input type="text" placeholder="Masukan kata kunci..." />
       </div>
       <table className="table">
         <thead>
@@ -18,30 +29,30 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Laptop</td>
-            <td className="text-right">RP. 20.000.000</td>
-            <td className="text-center">
-              <Link to="/detail" className="btn btn-sm btn-info">Detail</Link>
-              <Link to="/edit" className="btn btn-sm btn-warning">Edit</Link>
-              <Link to="#" className="btn btn-sm btn-danger">Delete</Link>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Monitor</td>
-            <td className="text-right">RP. 10.000.000</td>
-            <td className="text-center">
-              <Link to="/detail" className="btn btn-sm btn-info">Detail</Link>
-              <Link to="/edit" className="btn btn-sm btn-warning">Edit</Link>
-              <Link to="#" className="btn btn-sm btn-danger">Delete</Link>
-            </td>
-          </tr>
+          {product.map((result, index) => {
+            return (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{result.name}</td>
+                <td className="text-right">RP. {result.price}</td>
+                <td className="text-center">
+                  <Link to="/detail" className="btn btn-sm btn-info">
+                    Detail
+                  </Link>
+                  <Link to="/edit" className="btn btn-sm btn-warning">
+                    Edit
+                  </Link>
+                  <Link to="#" className="btn btn-sm btn-danger">
+                    Delete
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
 export default Home;
