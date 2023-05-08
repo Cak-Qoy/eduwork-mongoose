@@ -13,7 +13,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact children={() => <Home />} />
           <Route path="/detail/:id" children={() => <Detail />} />
-          <Route path="/edit" children={() => <Edit />} />
+          <Route path="/edit/:id" children={() => <Edit />} />
           <Route path="/tambah" children={() => <Tambah />} />
         </Switch>
       </BrowserRouter>

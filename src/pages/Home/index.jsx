@@ -3,18 +3,32 @@ import "./index.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Home = (props) => {
+const Home = () => {
   const [product, setProduct] = useState([]);
-  useEffect(() => {
+
+  function getPostApi() {
     axios.get("http://localhost:3000/api/product").then((result) => {
       setProduct(result.data);
     });
+  }
+  
+  function handleRemove(data) {
+    axios.get(`http://localhost:3000/api/product/${data}`).then((res) => {
+      if (window.confirm(`Anda yakin ingin menghapus product "${res.data.name}" ?`)) {
+        axios.delete(`http://localhost:3000/api/product/${data}`).then(() => getPostApi())
+      }
+    })
+  }
+
+  useEffect(() => {
+    getPostApi()
   }, []);
+
 
   return (
     <div className="main">
       <Link to="/tambah" className="btn btn-primary">
-        Tamah Produk
+        Tambah Produk
       </Link>
       <div className="search">
         <input type="text" placeholder="Masukan kata kunci..." />
@@ -36,13 +50,13 @@ const Home = (props) => {
                 <td>{result.name}</td>
                 <td className="text-right">RP. {result.price}</td>
                 <td className="text-center">
-                  <Link to="/detail" className="btn btn-sm btn-info">
+                  <Link to={`/detail/${result._id}`} className="btn btn-sm btn-info">
                     Detail
                   </Link>
-                  <Link to="/edit" className="btn btn-sm btn-warning">
+                  <Link to={`/edit/${result._id}`} className="btn btn-sm btn-warning">
                     Edit
                   </Link>
-                  <Link to="#" className="btn btn-sm btn-danger">
+                  <Link to="#" className="btn btn-sm btn-danger" onClick={() => handleRemove(result._id)}>
                     Delete
                   </Link>
                 </td>
